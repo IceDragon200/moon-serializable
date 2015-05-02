@@ -3,4 +3,5 @@ name: Serializable
 author: IceDragon200 (Corey Powell) (mistdragon100@gmail.com)
 description: Mixin for creating serializable objects.
 require: _basalt.rb
-deps: []
+deps:
+- moon-prototype

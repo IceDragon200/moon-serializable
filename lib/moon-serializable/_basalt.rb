@@ -1,0 +1,1 @@
+require 'moon-serializable/load'
