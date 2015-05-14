@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.name        = 'moon-serializable'
   s.summary     = 'Moon Serializable package.'
   s.description = 'Mixin for defining serializable attributes.'
-  s.homepage    = 'https://github.com/IceDragon200/moon-serializable'
+  s.homepage    = 'https://github.com/polyfox/moon-serializable'
   s.email       = 'mistdragon100@gmail.com'
   s.version     = Moon::Serializable::Version::STRING
   s.platform    = Gem::Platform::RUBY
