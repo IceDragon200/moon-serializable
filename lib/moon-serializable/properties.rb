@@ -12,12 +12,13 @@ module Moon
     # When using Properties AND Serializable, be sure to include it BEFORE
     # Serializable, though the order shouldn't matter too much.
     module Properties
+      # Properties class methods.
       module ClassMethods
         extend Moon::Prototype
 
         prototype_attr :property
 
-        # Adds +name+ as a property of the class.
+        # Adds `name` as a property of the class.
         #
         # @param [String, Symbol] name
         # @return [Symbol] name of the property
@@ -27,21 +28,22 @@ module Moon
           name
         end
 
-        # Equivalent to attr_reader property(name)
+        # Equivalent to attr_reader {#add_property}(name)
+        #
         # @param [String, Symbol] name
         # @return [Void]
         private def property_reader(name)
           attr_reader add_property(name)
         end
 
-        # Equivalent to attr_writer property(name)
+        # Equivalent to attr_writer {#add_property}(name)
         # @param [String, Symbol] name
         # @return [Void]
         private def property_writer(name)
           attr_writer add_property(name)
         end
 
-        # Equivalent to attr_accessor property(name)
+        # Equivalent to attr_accessor {#add_property}(name)
         # @param [String, Symbol] name
         # @return [Void]
         private def property_accessor(name)
@@ -49,7 +51,10 @@ module Moon
         end
       end
 
+      # Properties instance methods.
       module InstanceMethods
+        # Yields each property key.
+        #
         # @yieldparam [Symbol] key
         def each_property_key
           return to_enum :each_property_key unless block_given?
@@ -95,6 +100,8 @@ module Moon
           public_send "#{name}=", value
         end
 
+        # Yields each property key and value.
+        #
         # @yieldparam [Symbol] key
         # @yieldparam [Object] value
         def each_property_pair
@@ -106,15 +113,20 @@ module Moon
 
         alias :each_property :each_property_pair
 
+        # Maps each property, the block is expected to ret
+        #
         # @yieldparam [Symbol] key
         # @yieldparam [Object] value
         # @yieldreturn [Object] new_value
         def map_properties
+          return :map_properties unless block_given?
           each_property do |key, value|
             property_set key, yield(key, value)
           end
         end
 
+        # Returns a Hash with the properties key, value pairs
+        #
         # @return [Hash<Symbol, Object>]
         def properties_to_h
           # This may be a bit slower than creating a result hash and setting
@@ -127,6 +139,8 @@ module Moon
           each_property(&block)
         end
 
+        # Returns an inspect-like String with the properties key and values
+        #
         # @return [String]
         def inspect_properties
           id = format('%08x', __id__)
@@ -146,7 +160,7 @@ module Moon
           result
         end
 
-        # @return [String]
+        # (see #inspect_properties)
         def inspect
           inspect_properties
         end

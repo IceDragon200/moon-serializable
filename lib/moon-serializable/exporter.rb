@@ -2,11 +2,17 @@ require 'moon-serializable/serializer'
 
 module Moon
   module Serializable
+    # Serializer for exporting objects
     class Exporter < Serializer
-      # @param [Symbol] key
-      # @param [Object] value
-      # @param [Integer] depth
-      private def export_object(key, value, depth = 0)
+      # Exports the object, Arrays, and Hashes are handled specially,
+      # if the object responds to #export, it will export the object with
+      # Hash as the target.
+      #
+      # @param [Symbol] key  the current key being exported on (debug)
+      # @param [#export, Array, Hash, Object] value  object to export
+      # @param [Integer] depth  recursion depth (debug)
+      # @return [Object] exported object
+      def export_object(key, value, depth = 0)
         if value.respond_to?(:export)
           value.export({}, depth + 1)
         elsif value.is_a?(Array)
@@ -18,9 +24,12 @@ module Moon
         end
       end
 
+      # Exports the provided data, it MUST respond to #exported_properties
+      #
       # @param [#[]=] target
       # @param [#exported_properties] data
       # @param [Integer] depth
+      # @return [Object] the given target object
       def export(target, data, depth = 0)
         data.exported_properties do |key, value|
           target[key] = export_object(key, value, depth + 1)
@@ -28,9 +37,12 @@ module Moon
         target
       end
 
-      # @param [Object] target
-      # @param [Object] data
-      # @param [Integer] depth
+      # Creates a new instance of the Exporter and exports the provided
+      # data into the target.
+      #
+      # @param [Object] target  object to import the data in
+      # @param [Object] data    object to export the data from
+      # @param [Integer] depth  recursion depth (debug)
       def self.export(target, data, depth = 0)
         new.export(target, data, depth + 1)
       end
