@@ -2,6 +2,10 @@ require 'moon-prototype/load'
 
 module Moon
   module Serializable
+    # Error raised when a property could not be found
+    class PropertyError < KeyError
+    end
+
     # Properties are special attributes on an object, its default implementation,
     # is to use instance variables, to change this overwrites the
     # #property_get and #property_set methods.
@@ -46,23 +50,49 @@ module Moon
       end
 
       module InstanceMethods
-        # @param [Symbol] key
-        def property_get(key)
-          public_send key
-        end
-
-        # @param [Symbol] key
-        # @param [Object] value
-        def property_set(key, value)
-          public_send "#{key}=", value
-        end
-
         # @yieldparam [Symbol] key
         def each_property_key
           return to_enum :each_property_key unless block_given?
           self.class.each_property.each do |key|
             yield key
           end
+        end
+
+        # Checks if a property exists.
+        #
+        # @param [Symbol] name  property name
+        # @return [Boolean] true if the property exists, false otherwise
+        def has_property?(name)
+          name = name.to_sym
+          each_property_key { |key| return true if name == key }
+          false
+        end
+
+        # Ensures that a property by `name` exists
+        #
+        # @param [Symbol] name  property to check for
+        private def ensure_property(name)
+          unless has_property?(name)
+            raise PropertyError, "no such property #{name.inspect}"
+          end
+        end
+
+        # Gets a property's value
+        #
+        # @param [Symbol] name
+        # @return [Object] value
+        def property_get(name)
+          ensure_property name
+          public_send name
+        end
+
+        # Sets a property's value
+        #
+        # @param [Symbol] name  property name
+        # @param [Object] value
+        def property_set(name, value)
+          ensure_property name
+          public_send "#{name}=", value
         end
 
         # @yieldparam [Symbol] key
