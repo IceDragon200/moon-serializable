@@ -27,6 +27,10 @@ module Moon
         self
       end
 
+      # Callback after an import takes place.
+      def post_import
+      end
+
       # Imports the provided data into the object
       #
       # @param [Hash<String, Object>] data
@@ -34,7 +38,12 @@ module Moon
       # @return [self]
       def import(data, depth = 0)
         import_headless data, depth
+        post_import
         self
+      end
+
+      # Callback before an export takes place
+      def pre_export
       end
 
       # Exports the object as a Hash, all keys are expected to be strings.
@@ -42,6 +51,7 @@ module Moon
       # @param [Integer] depth
       # @return [Hash<String, Object>]
       def export(data = nil, depth = 0)
+        pre_export
         data = Exporter.export(data || {}, self, depth)
         data.merge!(serialization_export_header).stringify_keys
       end
