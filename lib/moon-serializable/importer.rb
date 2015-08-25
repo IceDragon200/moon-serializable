@@ -38,7 +38,9 @@ module Moon
       # @param [Integer] depth  recursion depth (debug)
       def import(target, data, depth = 0)
         target.exported_properties do |key, _|
-          target.property_set(key, import_object(key, data[key.to_s], depth + 1))
+          obj_data = data[key.to_s]
+          obj = import_object(key, obj_data, depth + 1)
+          target.property_set(key, obj)
         end
         target
       end
