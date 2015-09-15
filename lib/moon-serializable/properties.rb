@@ -147,8 +147,8 @@ module Moon
           result = "#<#{self.class}:0x#{id}: "
           each_property_pair do |key, value|
             s = case value
-            when Hash  then "#{value.empty? ? '{}' : '{...}'}[#{value.size}]"
-            when Array then "#{value.empty? ? '[]' : '[...]'}[#{value.size}]"
+            when Hash  then "#{value.empty? ? '{}' : '{...}'}(#{value.size})"
+            when Array then "#{value.empty? ? '[]' : '[...]'}(#{value.size})"
             else            value.inspect
             end
             result << "#{key}=#{s} "
