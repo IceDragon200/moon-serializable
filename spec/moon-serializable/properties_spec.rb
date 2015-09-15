@@ -83,7 +83,7 @@ describe Moon::Serializable::Properties do
     it 'returns a inpsect like String' do
       obj.a = [1]
       obj.b = {}
-      expect(obj.inspect).to match(/\<Fixtures::PropertiesTestObject#0x(\h+): a=\[\.\.\.\]\[1\] b=\{\}\[0\] c=nil>/)
+      expect(obj.inspect).to match(/#\<Fixtures::PropertiesTestObject:0x(\h+): a=\[\.\.\.\]\(1\) b=\{\}\(0\) c=nil>/)
     end
   end
 end
