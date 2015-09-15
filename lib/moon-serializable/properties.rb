@@ -144,15 +144,12 @@ module Moon
         # @return [String]
         def inspect_properties
           id = format('%08x', __id__)
-          result = "<#{self.class}#0x#{id}: "
+          result = "#<#{self.class}:0x#{id}: "
           each_property_pair do |key, value|
             s = case value
-            when Hash
-              "#{value.empty? ? '{}' : '{...}'}[#{value.size}]"
-            when Array
-              "#{value.empty? ? '[]' : '[...]'}[#{value.size}]"
-            else
-              value.inspect
+            when Hash  then "#{value.empty? ? '{}' : '{...}'}[#{value.size}]"
+            when Array then "#{value.empty? ? '[]' : '[...]'}[#{value.size}]"
+            else            value.inspect
             end
             result << "#{key}=#{s} "
           end
