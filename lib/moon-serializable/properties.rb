@@ -22,7 +22,7 @@ module Moon
         #
         # @param [String, Symbol] name
         # @return [Symbol] name of the property
-        private def add_property(name)
+        protected def add_property(name)
           name = name.to_sym
           properties << name
           name
@@ -32,21 +32,21 @@ module Moon
         #
         # @param [String, Symbol] name
         # @return [Void]
-        private def property_reader(name)
+        protected def property_reader(name)
           attr_reader add_property(name)
         end
 
         # Equivalent to attr_writer {#add_property}(name)
         # @param [String, Symbol] name
         # @return [Void]
-        private def property_writer(name)
+        protected def property_writer(name)
           attr_writer add_property(name)
         end
 
         # Equivalent to attr_accessor {#add_property}(name)
         # @param [String, Symbol] name
         # @return [Void]
-        private def property_accessor(name)
+        protected def property_accessor(name)
           attr_accessor add_property(name)
         end
       end
