@@ -2,6 +2,10 @@ require 'moon-serializable/serializer'
 
 module Moon
   module Serializable
+    # Error raised when importing fails
+    class ImportError < RuntimeError
+    end
+
     # Serializer for importing objects
     class Importer < Serializer
       # @param [String] klass_path  name of the class, or its pathe to import
@@ -10,7 +14,12 @@ module Moon
       # @param [Integer] depth  recursion depth (debug)
       # @return [Object] instance of the class imported
       private def import_class(klass_path, key, value, depth = 0)
-        Object.const_get(klass_path).load(value, depth + 1)
+        klass = Object.const_get(klass_path)
+        if klass.respond_to?(:load)
+          klass.load(value, depth + 1)
+        else
+          raise ImportError, "Cannot load data for class `#{klass}` (expected it to respond to `load`)"
+        end
       end
 
       # @param [String, Symbol] key  data key (debug)
