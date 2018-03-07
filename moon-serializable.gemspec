@@ -1,3 +1,4 @@
+require 'date'
 require_relative 'lib/moon-serializable/version'
 
 Gem::Specification.new do |s|
